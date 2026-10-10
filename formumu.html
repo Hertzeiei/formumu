@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>milk i luv u so much</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+
+    --bg: #cfe6ff;
+    --gin: rgba(255, 255, 255, .42);
+    --ink: #2b3a67;
+    --ink-soft: #52639a;
+    --red: #ff4d6d;
+    --blue: #3d7bfd;
+    --tape: #ffe27a;
+    --mint: #b8f0d8;
+    --btn-bg: #ffffff;
+    --shadow: rgba(43, 58, 103, .28);
+    --paper-ink: #2b3a67;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #1b2547;
+      --gin: rgba(255, 255, 255, .06);
+      --ink: #eaf1ff;
+      --ink-soft: #a9bbe8;
+      --btn-bg: #2a3869;
+      --shadow: rgba(0, 0, 0, .5);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #1b2547;
+    --gin: rgba(255, 255, 255, .06);
+    --ink: #eaf1ff;
+    --ink-soft: #a9bbe8;
+    --btn-bg: #2a3869;
+    --shadow: rgba(0, 0, 0, .5);
+  }
+
+  html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    min-height: 100vh;
+    background-color: var(--bg);
+    background-image:
+      repeating-linear-gradient(0deg, var(--gin) 0 24px, transparent 24px 48px),
+      repeating-linear-gradient(90deg, var(--gin) 0 24px, transparent 24px 48px);
+    color: var(--ink);
+    font-family: 'Prompt', 'Noto Sans Thai', system-ui, sans-serif;
+    display: flex;
+    justify-content: center;
+    overflow-x: hidden;
+  }
+
+  .stage {
+    --w: min(96vw, max(320px, calc((100vh - 260px) * 1.6)));
+    --h: calc(var(--w) * 0.62);
+    width: 100%;
+    max-width: 100%;
+    padding: 32px 12px 90px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* washi-tape style zigzag ends */
+  .tape {
+    background: var(--tape);
+    color: #4a3b00;
+    clip-path: polygon(0 0, 100% 0, 98% 25%, 100% 50%, 98% 75%, 100% 100%, 0 100%, 2% 75%, 0 50%, 2% 25%);
+  }
+
+  .title {
+    display: inline-block;
+    margin: 0 0 14px;
+    padding: 10px 34px;
+    font-size: 1.5rem;
+    font-weight: 700;
+    transform: rotate(-2deg);
+  }
+  .hint {
+    margin: 0 0 40px;
+    font-weight: 400;
+    color: var(--ink-soft);
+    text-align: center;
+    min-height: 1.6em;
+  }
+
+  /* ---------- Envelope (airmail) ---------- */
+  .env {
+    --stripe: repeating-linear-gradient(135deg, var(--red) 0 14px, #fff 14px 22px, var(--blue) 22px 36px, #fff 36px 44px);
+    position: relative;
+    width: var(--w);
+    height: var(--h);
+    filter: drop-shadow(0 16px 18px var(--shadow));
+    transition: margin-top .6s cubic-bezier(.3,.8,.3,1), margin-bottom .7s cubic-bezier(.3,.8,.3,1);
+  }
+  .open .env { margin-top: calc(var(--h) * 0.55); }
+
+  .back, .front, .flap, .decor {
+    position: absolute; left: 0; width: 100%;
+    transition: opacity .5s ease .25s;
+  }
+  .back {
+    top: 0; height: 100%;
+    background: var(--stripe);
+    border-radius: 14px;
+    z-index: 1;
+  }
+  .back::after {
+    content: ""; position: absolute; inset: 9px;
+    background: #fff;
+    border-radius: 8px;
+  }
+  .front {
+    top: 0; height: 100%;
+    background: var(--stripe);
+    border-radius: 14px;
+    clip-path: polygon(0 0, 50% 56%, 100% 0, 100% 100%, 0 100%);
+    z-index: 3;
+  }
+  .front::after {
+    content: ""; position: absolute; inset: 0;
+    background: linear-gradient(180deg, #fff1f5, #ffffff 70%);
+    clip-path: polygon(9px 11px, 50% calc(56% + 11px), calc(100% - 9px) 11px, calc(100% - 9px) calc(100% - 9px), 9px calc(100% - 9px));
+  }
+  .flap {
+    top: 0; height: 56%;
+    background: var(--stripe);
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+    border-radius: 14px 14px 0 0;
+    transform-origin: top center;
+    transition: transform .65s cubic-bezier(.4,.1,.2,1), z-index 0s .3s, opacity .5s ease .25s;
+    z-index: 4;
+  }
+  .flap::after {
+    content: ""; position: absolute; inset: 0;
+    background: #fff;
+    clip-path: polygon(11px 9px, calc(100% - 11px) 9px, 50% calc(100% - 13px));
+  }
+  .open .flap { transform: rotateX(180deg); z-index: 1; }
+
+  /* printed details on the front */
+  .decor { top: 0; height: 100%; z-index: 3; pointer-events: none; }
+  .stamp {
+    position: absolute; right: 8%; bottom: 14%;
+    width: 13%; aspect-ratio: 4 / 5;
+    background: #ffe0e8;
+    border: 2px solid var(--red);
+    border-radius: 3px;
+    outline: 3px dotted var(--red);
+    outline-offset: 3px;
+    display: grid; place-items: center;
+    color: var(--red);
+    font-size: clamp(14px, 3.6vw, 24px);
+    transform: rotate(4deg);
+  }
+  .postmark {
+    position: absolute; right: 19%; bottom: 10%;
+    width: 24%;
+    color: var(--blue);
+    opacity: .6;
+    transform: rotate(-6deg);
+  }
+  .addr { position: absolute; left: 8%; bottom: 13%; width: 38%; }
+  .addr i {
+    display: block; height: clamp(14px, 3.8vw, 24px);
+    border-bottom: 2px solid #c9d5f2;
+  }
+  .addr b {
+    display: inline-block;
+    margin-bottom: 8px;
+    padding: 1px 8px;
+    border: 2px solid var(--blue);
+    border-radius: 4px;
+    color: var(--blue);
+    font-size: clamp(9px, 2.2vw, 13px);
+    font-weight: 600;
+  }
+
+  .seal {
+    position: absolute;
+    left: 50%; top: 56%;
+    width: clamp(38px, 9vw, 54px); aspect-ratio: 1;
+    margin: calc(clamp(38px, 9vw, 54px) / -2) 0 0 calc(clamp(38px, 9vw, 54px) / -2);
+    z-index: 5;
+    display: grid; place-items: center;
+    font-size: clamp(18px, 4.5vw, 26px);
+    background: var(--red);
+    color: #fff;
+    border: 3px solid #fff;
+    border-radius: 50%;
+    box-shadow: 0 3px 0 rgba(0,0,0,.14);
+    transform: rotate(-8deg);
+    transition: transform .4s ease, opacity .3s ease;
+    animation: beat 1.8s ease-in-out infinite;
+  }
+  .open .seal { transform: scale(0) rotate(-8deg); opacity: 0; animation: none; }
+  @keyframes beat {
+    0%, 100% { transform: rotate(-8deg) scale(1); }
+    12% { transform: rotate(-8deg) scale(1.14); }
+    24% { transform: rotate(-8deg) scale(1); }
+    36% { transform: rotate(-8deg) scale(1.1); }
+    48% { transform: rotate(-8deg) scale(1); }
+  }
+
+  .openBtn {
+    position: absolute; inset: -6px;
+    z-index: 9;
+    background: transparent;
+    border: 0; border-radius: 20px;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .openBtn:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; }
+  .open .openBtn { display: none; }
+
+  .read .back, .read .front, .read .flap, .read .decor, .read .seal { opacity: 0; pointer-events: none; }
+
+  /* ---------- Letter: one landscape photo ---------- */
+  .letter {
+    position: absolute;
+    left: 4%; top: 8px;
+    width: 92%;
+    padding: 10px;
+    max-height: calc(var(--h) * 0.78);
+    overflow: hidden;
+    z-index: 2;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 0 0 1px rgba(43,58,103,.12) inset;
+    transition: transform .8s cubic-bezier(.3,.8,.3,1) .25s, max-height .9s ease, box-shadow .6s;
+  }
+  .open .letter { transform: translateY(calc(var(--h) * -0.55)); }
+  .read .letter {
+    z-index: 6;
+    max-height: 1400px;
+    box-shadow: 0 0 0 1px rgba(43,58,103,.12) inset, 0 18px 30px var(--shadow);
+  }
+
+  .inner {
+    position: relative;
+    aspect-ratio: 3 / 2;
+    border-radius: 6px;
+    overflow: hidden;
+    background: #ffd9e6;
+  }
+  .photo { position: absolute; inset: 0; }
+  .photo img {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: none;
+  }
+  .photo.has-img img { display: block; }
+  .ph {
+    position: absolute; inset: 0;
+    display: grid; place-items: center;
+    font-size: clamp(48px, 14vw, 96px);
+    color: #fff;
+    background-color: #ffc2d6;
+    background-image:
+      repeating-linear-gradient(0deg, rgba(255,255,255,.35) 0 22px, transparent 22px 44px),
+      repeating-linear-gradient(90deg, rgba(255,255,255,.35) 0 22px, transparent 22px 44px);
+  }
+  .photo.has-img .ph { display: none; }
+
+  [contenteditable] { cursor: text; outline: none; }
+
+  .to {
+    position: absolute;
+    top: 12px; left: 10px;
+    max-width: 72%;
+    margin: 0;
+    padding: 6px 20px;
+    font-size: 1.05rem;
+    font-weight: 600;
+    transform: rotate(-3deg);
+    box-shadow: none;
+  }
+  .to:hover { background: #ffd95a; }
+  .to:focus { background: #ffcf2e; text-decoration: underline dotted; }
+
+  .corner {
+    position: absolute; top: -6px; right: -26px;
+    width: 92px; height: 26px;
+    background: var(--mint);
+    opacity: .9;
+    transform: rotate(40deg);
+    pointer-events: none;
+  }
+
+  .note {
+    position: absolute;
+    left: 12px; bottom: 12px;
+    width: min(62%, 380px);
+    padding: 10px 16px 10px;
+    background: rgba(255,255,255,.93);
+    color: var(--paper-ink);
+    border-radius: 10px;
+    box-shadow: 0 6px 14px rgba(43,58,103,.25);
+    transform: rotate(-1deg);
+    transition: opacity .35s ease, transform .35s ease;
+  }
+  .hide-note .note { opacity: 0; transform: translateY(14px) rotate(-1deg); pointer-events: none; }
+  .msg {
+    margin: 0 0 4px;
+    font-weight: 400;
+    font-size: .98rem;
+    line-height: 1.7;
+    border-radius: 6px;
+  }
+  .sign {
+    margin: 0;
+    text-align: right;
+    font-weight: 600;
+    font-size: .98rem;
+    border-radius: 6px;
+  }
+  .msg:hover, .sign:hover { background: rgba(255, 226, 122, .35); }
+  .msg:focus, .sign:focus { background: rgba(255, 226, 122, .6); }
+
+  /* ---------- Controls ---------- */
+  .controls {
+    position: fixed;
+    left: 0; right: 0;
+    bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+    z-index: 10;
+    margin-top: 0;
+    display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;
+    opacity: 0; pointer-events: none;
+    transform: translateY(10px);
+    transition: opacity .4s ease, transform .4s ease;
+  }
+  .read .controls { opacity: 1; transform: none; transition-delay: .5s; }
+  .read .controls .btn { pointer-events: auto; }
+  .btn {
+    font-family: inherit;
+    font-size: .95rem;
+    font-weight: 500;
+    padding: 9px 18px;
+    border: 2px solid var(--ink);
+    border-radius: 999px;
+    background: var(--btn-bg);
+    color: var(--ink);
+    box-shadow: 0 3px 0 var(--ink);
+    cursor: pointer;
+    transition: transform .15s ease, box-shadow .15s ease;
+  }
+  .btn:active { transform: translateY(3px); box-shadow: 0 0 0 var(--ink); }
+  .btn:focus-visible { outline: 3px solid var(--red); outline-offset: 3px; }
+  .btn.primary { background: var(--tape); color: #4a3b00; border-color: #4a3b00; box-shadow: 0 3px 0 #4a3b00; }
+  .btn.primary:active { box-shadow: 0 0 0 #4a3b00; }
+
+  .tip {
+    margin: 16px 0 0;
+    font-size: .85rem;
+    font-weight: 300;
+    color: var(--ink-soft);
+    text-align: center;
+    opacity: 0;
+    transition: opacity .4s ease .6s;
+  }
+  .read .tip { opacity: 1; }
+
+  /* hearts burst */
+  .pop {
+    position: fixed;
+    z-index: 50;
+    pointer-events: none;
+    font-size: 20px;
+    animation: rise 1.5s ease-out forwards;
+  }
+  @keyframes rise {
+    0% { transform: translate(0, 0) scale(.4); opacity: 0; }
+    15% { opacity: 1; }
+    100% { transform: translate(var(--dx), var(--dy)) scale(1.1) rotate(var(--rot)); opacity: 0; }
+  }
+
+  @media (max-width: 520px) {
+    .stage { padding-top: 32px; }
+    .title { font-size: 1.25rem; padding: 8px 26px; }
+    .letter { padding: 7px; }
+    .to { font-size: .85rem; padding: 4px 16px; top: 9px; left: 8px; }
+    .note { left: 8px; bottom: 8px; width: 74%; padding: 7px 11px; }
+    .msg, .sign { font-size: .78rem; line-height: 1.55; }
+    .corner { width: 70px; height: 20px; right: -22px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .seal { animation: none; }
+    .env, .letter, .flap, .controls, .note { transition-duration: .01s !important; transition-delay: 0s !important; }
+    .pop { display: none; }
+  }
+</style>
+</head>
+<body>
+  <main class="stage" id="stage">
+    <h1 class="title tape">นายไปรษณีย์แยมมี่มีจดหมายมาส่งครับ</h1>
+
+
+    <div class="env" id="env">
+      <div class="back"></div>
+
+      <div class="letter" id="letter">
+        <div class="inner" id="inner">
+          <div class="photo" id="photo">
+            <div class="ph"><span>♥</span></div>
+            <img id="img" alt="รูปในจดหมาย">
+          </div>
+          <span class="corner"></span>
+          <p class="to tape" id="to" contenteditable="true" spellcheck="false">ถึงมะหมูมะหมู</p>
+
+        </div>
+      </div>
+
+      <div class="front"></div>
+      <div class="decor" aria-hidden="true">
+        <div class="addr"><b>ถึงคนที่เป็นหมู</b><i></i><i></i><i></i></div>
+        <svg class="postmark" viewBox="0 0 130 50" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+          <circle cx="25" cy="25" r="20"/>
+          <circle cx="25" cy="25" r="13"/>
+          <path d="M50 12 q10 -7 20 0 t20 0 t20 0 t20 0"/>
+          <path d="M50 25 q10 -7 20 0 t20 0 t20 0 t20 0"/>
+          <path d="M50 38 q10 -7 20 0 t20 0 t20 0 t20 0"/>
+        </svg>
+        <div class="stamp">♥</div>
+      </div>
+      <div class="flap"></div>
+      <div class="seal" aria-hidden="true">♥</div>
+      <button class="openBtn" id="openBtn" type="button" aria-label="เปิดซองจดหมาย"></button>
+    </div>
+
+    <div class="controls">
+      <button class="btn primary" id="closeBtn" type="button">เก็บจดหมาย</button>
+    </div>
+  </main>
+
+<script>
+(function () {
+  var $ = function (s) { return document.querySelector(s); };
+  var stage = $('#stage'), env = $('#env'), inner = $('#inner'), hint = $('#hint');
+  var photo = $('#photo'), img = $('#img');
+  var state = 'closed';
+
+  /* ===== ใส่รูปตรงนี้ =====
+     1) วางไฟล์รูป .jpg ไว้โฟลเดอร์เดียวกับไฟล์ html นี้
+     2) แก้ชื่อไฟล์ด้านล่างให้ตรงกับชื่อรูปของคุณ (เช่น 'photo.jpg', 'us.jpg')
+     รูปแนวนอนอัตราส่วน 3:2 จะพอดีที่สุด (ถ้าหาไฟล์ไม่เจอ จะเห็นเป็นลายหัวใจสีชมพูแทน) */
+  var IMAGE_FILE = 'Happy.png';
+
+  function save(k, v) { try { localStorage.setItem('airmail:' + k, v); } catch (e) {} }
+  function load(k) { try { return localStorage.getItem('airmail:' + k); } catch (e) { return null; } }
+
+  function layout() {
+    if (state !== 'read') { env.style.marginBottom = '0px'; return; }
+    var h = env.offsetHeight;
+    var letterBottom = 8 - h * 0.55 + inner.offsetHeight + 20;
+    env.style.marginBottom = (letterBottom - h + 24) + 'px';
+  }
+  if (window.ResizeObserver) new ResizeObserver(layout).observe(inner);
+  window.addEventListener('resize', layout);
+
+  function burst() {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var r = env.getBoundingClientRect();
+    var cx = r.left + r.width / 2, cy = r.top + r.height * 0.45;
+    var set = ['💖', '💗', '✨', '🌸', '💕', '⭐'];
+    for (var i = 0; i < 16; i++) {
+      var s = document.createElement('span');
+      s.className = 'pop';
+      s.textContent = set[i % set.length];
+      s.style.left = cx + 'px';
+      s.style.top = cy + 'px';
+      s.style.setProperty('--dx', (Math.random() * 260 - 130) + 'px');
+      s.style.setProperty('--dy', (-80 - Math.random() * 200) + 'px');
+      s.style.setProperty('--rot', (Math.random() * 60 - 30) + 'deg');
+      s.style.animationDelay = (Math.random() * 0.25) + 's';
+      document.body.appendChild(s);
+      setTimeout(function (el) { el.remove(); }.bind(null, s), 1900);
+    }
+  }
+
+  function goRead() {
+    if (state !== 'open') return;
+    state = 'read';
+    stage.classList.add('read');
+    try { layout(); } catch (e) {}
+  }
+
+  function openLetter() {
+    if (state !== 'closed') return;
+    state = 'open';
+    stage.classList.add('open');
+    if (hint) hint.textContent = 'เปิดแล้ว! อ่านได้เลย';
+    setTimeout(goRead, 950);
+    try { burst(); } catch (e) {}
+  }
+
+  function closeLetter() {
+    if (state !== 'read') return;
+    state = 'open';
+    stage.classList.remove('read');
+    layout();
+    setTimeout(function () {
+      stage.classList.remove('open');
+      state = 'closed';
+      if (hint) hint.textContent = 'แตะที่ซองเพื่อเปิดอ่านนะ';
+    }, 700);
+  }
+
+  $('#openBtn').addEventListener('click', openLetter);
+  $('#closeBtn').addEventListener('click', closeLetter);
+  $('#letter').addEventListener('click', goRead);
+
+  img.addEventListener('load', function () { photo.classList.add('has-img'); });
+  img.addEventListener('error', function () { photo.classList.remove('has-img'); });
+  img.src = IMAGE_FILE;
+
+  ['to'].forEach(function (id) {
+    var el = document.getElementById(id);
+    var saved = load(id);
+    if (saved) el.textContent = saved;
+    el.addEventListener('input', function () { save(id, el.textContent); });
+    el.addEventListener('paste', function (e) {
+      e.preventDefault();
+      var t = (e.clipboardData || window.clipboardData).getData('text');
+      document.execCommand('insertText', false, t);
+    });
+    el.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') e.preventDefault();
+    });
+  });
+})();
+</script>
+</body>
+</html>
